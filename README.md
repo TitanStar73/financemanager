@@ -13,3 +13,8 @@ Analyze your income and expenses to find out how much to cut back, where to spen
 Everything from adding tax + tip, splitting equally among all, or custom splits (for that one friend who ordered a gold covered lobster :P)
 
 ![p1](https://github.com/user-attachments/assets/9cff3125-68ef-4570-8cea-1df81afa7d63)
+
+# Installation options
+
+- Run binary `main.exe`
+- Run python script `main.py` (no dependencies)
