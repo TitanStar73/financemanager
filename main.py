@@ -102,6 +102,7 @@ def split_bill():
     current_bill = 0
 
     while current_bill < total:
+        print(f"The current remaining bill to split is {total - current_bill}.")
         print("How would you like to modify the split?")
         print("1. Add a fixed amount to a person's bill (e.g. person 1 pays $5 of the bill or 5% of the bill before split)")
         print("2. Split the remaining bill in an equal ratio.")
@@ -124,7 +125,11 @@ def split_bill():
             if index == None:
                 print("Person not found.")
                 continue
-            amount = float(input("Enter the amount to add to the bill: "))
+            amount = input("Enter the amount to add to the bill: ")
+            if amount[-1] == "%":
+                amount = float(amount[:-1])/100 * total
+            else:
+                amount = float(amount)
             amounts[index] += amount
             current_bill += amount
         elif choice == 2:
@@ -134,17 +139,53 @@ def split_bill():
         elif choice == 3:
             ratios = []
             for i in range(0,num_people):
-                try:
-                    ratios.append(float(input(f"Enter the ratio for {names[i]}: ")))
-                except:
-                    print("Invalid input. Please enter a number.")
-                    
+                while True:
+                    try:
+                        ans = input(f"Enter the ratio for {names[i]}: ")
+                        if ans[-1] == "%":
+                            ans = ans[:-1]
+                        ratios.append(float(ans))
+                        break
+                    except:
+                        print("Invalid input. Please enter a number.")
+
+            total_ratio = sum(ratios)
+            for i in range(0, num_people):
+                amounts[i] += (total - current_bill) * (ratios[i]/total_ratio)
+        elif choice == 4:
+            amount = input("Enter the amount to split: ")
+            if amount[-1] == "%":
+                amount = (float(amount[:-1])/100) * total
+            else:
+                amount = float(amount)
+            ratios = []
+            for i in range(0,num_people):
+                while True:
+                    try:
+                        ans = input(f"Enter the ratio for {names[i]}: ")
+                        if ans[-1] == "%":
+                            ans = ans[:-1]
+                        ratios.append(float(ans))
+                        break
+                    except:
+                        print("Invalid input. Please enter a number.")
+
+            total_ratio = sum(ratios)
+            for i in range(0, num_people):
+                amounts[i] += amount * (ratios[i]/total_ratio)
+            current_bill += amount
+    
+    print(f"\nHere is the final bill: ")
+    for i in range(0, num_people):
+        print(f"{names[i]} should pay {amounts[i]}.")
+
 print("Welcome to the finance manager!")
 print("\nWhat would you like to do?")
 print("1. Analyze your finances (income, expenses, savings etc.)")
+print("2. Split a bill between multiple people (includes custom splits!)")
 choice = None
 print("")
-while choice not in [i for i in range(1, 2)]:
+while choice not in [i for i in range(1, 3)]:
     try:
         choice = int(input("Enter your choice number: "))
     except:
@@ -152,3 +193,5 @@ while choice not in [i for i in range(1, 2)]:
 
 if choice == 1:
     finance_analysis()
+elif choice == 2:
+    split_bill()
